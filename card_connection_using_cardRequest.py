@@ -6,3 +6,4 @@ cardreq=CardRequest(timeout=100, cardType=cardtype)
 cardservice=cardreq.waitforcard()
 cardservice.connection.connect()
 print(toHexString(cardservice.connection.getATR()))
+

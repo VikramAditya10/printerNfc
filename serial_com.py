@@ -1,30 +1,15 @@
-import usb.core
-import usb.util
+from smartcard.CardType import AnyCardType
+from smartcard.CardRequest import  CardRequest
+from smartcard.util import toHexString
+COMMAND = [0xFF, 0xCA, 0x00, 0x00, 0x00] #handshake cmd needed to initiate data transfer
+LOAD_AUTH_KEY=[0xFF,0x82,0x00,0x00,0x06,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]#Load authentication key
+AUTHENTICATE_COMMAND=[0xFF, 0x88, 0x00, 0x04, 0x60, 0x00]#authenticate
 
-# find our device
-dev = usb.core.find(idVendor=0xfffe, idProduct=0x0001)
-
-# was it found?
-if dev is None:
-    raise ValueError('Device not found')
-
-# set the active configuration. With no arguments, the first
-# configuration will be the active one
-dev.set_configuration()
-
-# get an endpoint instance
-cfg = dev.get_active_configuration()
-intf = cfg[(0,0)]
-
-ep = usb.util.find_descriptor(
-    intf,
-    # match the first OUT endpoint
-    custom_match = \
-    lambda e: \
-        usb.util.endpoint_direction(e.bEndpointAddress) == \
-        usb.util.ENDPOINT_OUT)
-
-assert ep is not None
-
-# write the data
-ep.write('test')
+cardtype=AnyCardType()
+cardreq=CardRequest(timeout=100, cardType=cardtype)
+cardservice=cardreq.waitforcard()
+cardservice.connection.connect()
+print(toHexString(cardservice.connection.getATR()))
+print(cardservice.connection.transmit(LOAD_AUTH_KEY))
+print(cardservice.connection.transmit(AUTHENTICATE_COMMAND))
+print(cardservice.connection.transmit([0xFF, 0xB0, 0x00, 0x04, 0x3]))
