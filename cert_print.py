@@ -43,7 +43,7 @@ def authenticate():
     if resp[1]==144:
         print("Authentication done")
     else:
-        print("Problem while authenticating "+resp)
+        print("Problem while authenticating "+str(resp))
     
     
 
