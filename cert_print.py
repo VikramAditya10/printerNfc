@@ -9,7 +9,7 @@ from smartcard.CardRequest import  CardRequest
 from smartcard.util import toHexString
 url_prefix="http://certificateweb.sumato.tech/api/v1/"
 url_all_certs_init=url_prefix+"studentsall"
-url_all_certs_complete=url_prefix+"stugents/print/completed"
+url_all_certs_complete=url_prefix+"students/print/completed"
 url_cert_status=url_prefix+"print/status/"
 url_cert_pdf=url_prefix+"print/pdf/"#provide certificate id
 url_update_cert_complete=url_prefix+"print/complete/" #provide certificate id
@@ -74,9 +74,9 @@ def writeTag(value):
                 WRITE_COMMAND = [0xFF,0xD6,0x00,0x04,0x04,int(value[0:2],16),int(value[2:4],16),int(value[4:6],16),int(value[6:8],16)]
                 print(WRITE_COMMAND)
                 #[0xFF, 0xD6, 0x00, int(page), 0x04, int(value[0:2], 16), int(value[2:4], 16), int(value[4:6], 16), int(value[6:8], 16)]
-                # Let's write a page Page 9 is usually 00000000
-                resp = cardservice.connection.transmit(AUTHENTICATE_COMMAND)
-                print(resp)
+                #Let's write a page Page 9 is usually 00000000
+                #resp = cardservice.connection.transmit(AUTHENTICATE_COMMAND)
+                #print(resp)
                 resp = cardservice.connection.transmit(WRITE_COMMAND)
                 print(resp)
                 if resp[1] == 144:
